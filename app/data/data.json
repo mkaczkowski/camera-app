@@ -1,0 +1,41 @@
+{
+	"items" : [
+		{
+			"img": "images/thumbs/owl1",
+			"ext": ".jpg",
+			"height":"200",
+			"width":"300"
+		},
+		{
+			"img": "images/thumbs/owl2",
+			"ext": ".jpg",
+			"height":"200",	
+			"width":"300"
+		},
+		{
+			"img": "images/thumbs/owl3",
+			"ext": ".jpg",
+			"height":"200",
+			"width":"300"
+		},
+		{
+			"img": "images/thumbs/owl4",
+			"ext": ".jpg",
+			"height":"200",
+			"width":"300"
+		},
+		{
+			"img": "images/thumbs/owl5",
+			"ext": ".jpg",
+			"height":"200",
+			"width":"300"
+		},
+		{
+			"img": "images/thumbs/owl6",
+			"ext": ".jpg",
+			"height":"200",
+			"width":"300"
+		}
+	]
+}
+

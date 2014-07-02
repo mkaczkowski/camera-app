@@ -29,10 +29,8 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
                 onrendered: function(canvas) {
                     imageService.saveCanvasToFile(canvas,
                         function(msg){
-                            console.log(msg);
                             hide();
                         },function(err){
-                            console.log(err);
                             hide();
                         });
                     //document.getElementById('debugPanel').appendChild(canvas);

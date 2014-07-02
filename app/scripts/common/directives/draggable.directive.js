@@ -2,7 +2,7 @@
 var mySharedService = angular.module('sioWebApp.common').factory('mySharedService', function($rootScope) {
 	var sharedService = {};
 
-    sharedService.zIndex = 1;
+	sharedService.zIndex = 1;
 	sharedService.message = '';
 
 	sharedService.prepForBroadcast = function(msg) {
@@ -14,9 +14,9 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
 		$rootScope.$broadcast('handleBroadcast');
 	};
 
-    sharedService.clearAll = function() {
-        $rootScope.$broadcast('clearAll');
-    };
+	sharedService.clearAll = function() {
+		$rootScope.$broadcast('clearAll');
+	};
 
 	return sharedService;
 });
@@ -28,79 +28,80 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
 		replace: true,
 		piority: 10000,
 		scope: {
-			src: '@'
+			src:  '@',
+			top:  '@',
+			left: '@'
 		},
 		controller: function($scope, $element, mySharedService){
-            $scope.isSelected = true;
+			$scope.isSelected = true;
 
-            $scope.removeElement = function(){
+			$scope.removeElement = function(){
 				$element.remove();
 			};
 
-            $scope.moveUp = function(){
-                //var imgElement = angular.element($element.children()[0]);
-                var imgElement = $element;
-                var zIndex = parseInt(imgElement.css( "zIndex"));
-                console.log(zIndex)
-                imgElement.css( "zIndex", zIndex+1 );
-            };
+			$scope.moveUp = function(){
+				//var imgElement = angular.element($element.children()[0]);
+				var imgElement = $element;
+				var zIndex = parseInt(imgElement.css( "zIndex"));
+				console.log(zIndex)
+				imgElement.css( "zIndex", zIndex+1 );
+			};
 
-            $scope.moveDown = function(){
-                ///var imgElement = angular.element($element.children()[0]);
-                var imgElement = $element;
-                var zIndex = parseInt(imgElement.css( "zIndex"));
-                console.log(zIndex)
-                if(zIndex == 0) return;
-                imgElement.css( "zIndex", zIndex-1  );
-            };
+			$scope.moveDown = function(){
+				///var imgElement = angular.element($element.children()[0]);
+				var imgElement = $element;
+				var zIndex = parseInt(imgElement.css( "zIndex"));
+				console.log(zIndex)
+				if(zIndex == 0) return;
+				imgElement.css( "zIndex", zIndex-1  );
+			};
 
-            mySharedService.prepForBroadcast($element);
+			mySharedService.prepForBroadcast($element);
 		},
 		link: function (scope, element) {
 
+			element.css({top:scope.top,left:scope.left});
+
 			scope.$on('handleBroadcast', function() {
 				var tmpIsSelected = (mySharedService.message == element);
-                var needRefresh = tmpIsSelected != scope.isSelected;
-                scope.isSelected = tmpIsSelected;
-                scope.$apply();
-                if(needRefresh){
-                    verifyBorder();
-                }
+				var needRefresh = tmpIsSelected != scope.isSelected;
+				scope.isSelected = tmpIsSelected;
+				scope.$apply();
+				if(needRefresh){
+					verifyBorder();
+				}
 			});
 
-            scope.$on('clearAll', function() {
-                scope.removeElement();
-            });
+			scope.$on('clearAll', function() {
+				scope.removeElement();
+			});
 
-            var verifyBorder = function(){
-                var imgElement = angular.element(element.children()[0]);
-                if(!scope.isSelected){
-                    imgElement.removeClass("selectedDraggable").css("border","");
-                }else{
-                    imgElement.addClass("selectedDraggable").css("border","3px dashed #545565");
-                }
-            }
+			var verifyBorder = function(){
+				var imgElement = angular.element(element.children()[0]);
+				if(!scope.isSelected){
+					imgElement.removeClass("selectedDraggable").css("border","");
+				}else{
+					imgElement.addClass("selectedDraggable").css("border","3px dashed #545565");
+				}
+			}
 
-             verifyBorder();
+			verifyBorder();
 
 			interact(element.get( 0 ))
 					.draggable({
 						onStart:function (event) {
 							var targetElement = angular.element(target);
-                            var imgElement = angular.element(targetElement.children()[0]);
+							var imgElement = angular.element(targetElement.children()[0]);
 							if(!imgElement.hasClass("selectedDraggable")){
 								interact.stop(event);
 							}
 						},
 						onmove: function (event) {
 							var target = event.target;
-
 							target.x = (target.x|0) + event.dx;
 							target.y = (target.y|0) + event.dy;
-
 							target.style.webkitTransform = target.style.transform =
 									'translate(' + target.x + 'px, ' + target.y + 'px)';
-
 						}
 					})
 					.on('dragend', function (event) {
@@ -151,7 +152,7 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
 			})
 
 			element.bind('click touchstart', function (event) {
-                mySharedService.prepForBroadcast(element);
+				mySharedService.prepForBroadcast(element);
 			})
 		}
 	};
@@ -166,26 +167,48 @@ angular.module('sioWebApp.common').directive('carousel', function($compile, mySh
 		template: '<div class="myCarousel" style="width: 100%;" ng-transclude></div>',
 		link: function(scope, element) {
 
-			angular.element(".thumb-img").bind('click', function (event) {
-				var srcAttr = angular.element(event.target).attr("src");
-
-				var newElement = $compile('<draggable-item id="1" src="'+srcAttr+'"/>')(scope);
-				var containerElement = angular.element(document.getElementById('draggableContainer'));
-
-				var offsetTop = (containerElement.height() - 200)/2;
-				var offsetLeft = (containerElement.width() - 200)/2;
-				newElement.css({top:offsetTop+"px",left:offsetLeft+"px"});
-				containerElement.append(newElement);
-			})
-
-
 			element.owlCarousel({
+				jsonPath : 'data/data.json',
+				jsonSuccess : customDataSuccess,
 				singleItem: false,
 				lazyLoad : true,
 				navigation : true,
 				pagination: false,
 				items : 4
 			});
+
+			function customDataSuccess(data){
+				var content = "";
+				for(var i in data["items"]){
+					var width = data["items"][i].width;
+					var height = data["items"][i].height;
+					var img = data["items"][i].img;
+					var ext = data["items"][i].ext;
+					var path = img + ext;
+					var thumb = img +".min" + ext;
+					content += "<div ><img class='thumb-img' style='max-width: 100%' data-width='"+width+"' data-height='"+height+"' src='"+path+"' ></div>";
+				}
+				element.html(content);
+				applyHandlers();
+			}
+
+			function applyHandlers() {
+				angular.element(".thumb-img").bind('click', function (event) {
+					var targetElement = angular.element(event.target);
+					var widthAttr = parseInt(targetElement.attr("data-width"));
+					var heightAttr = parseInt(targetElement.attr("data-height"));
+					var srcAttr = targetElement.attr("src");
+
+					var containerElement = angular.element(document.getElementById('draggableContainer'));
+					var offsetTop = (containerElement.height() - heightAttr)/2;
+					var offsetLeft = (containerElement.width() - widthAttr)/2;
+					var newElement = $compile('<draggable-item id="1" src="'+srcAttr+'" top="'+offsetTop+'px" left="'+offsetLeft+'px"/>')(scope);
+
+
+					//newElement.css({top:offsetTop+"px",left:offsetLeft+"px"});
+					containerElement.append(newElement);
+				})
+			}
 		}
 	};
 });
