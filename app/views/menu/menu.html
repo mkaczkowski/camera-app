@@ -1,0 +1,5 @@
+<ul class="nav nav-pills pull-right" >
+	<li ng-repeat="menuItem in menuItems" data-ng-class="{'active':isActive('/{{menuItem.path}}')}">
+		<a ui-sref="{{::menuItem.path}}">{{::menuItem.name}}</a>
+	</li>
+</ul>

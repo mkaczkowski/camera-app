@@ -1,0 +1,61 @@
+<div class="jumbotron">
+
+
+    <!--  <div class="button-bar">
+          <a class="button">First</a>
+          <a class="button">Second</a>
+          <a class="button">Third</a>
+      </div>-->
+    <div class="list card" style="position: absolute; bottom: 0px; top: 32px; left: 0px; right: 0px">
+
+        <div class="bar bar-header bar-stable">
+            <div class="button-bar-inline"  style="position:absolute;left:0">
+                <button class="button icon ion-android-camera" ng-click="getPicture()" />
+                <button class="button icon ion-android-image"/>
+                <button class="button icon ion-android-trash" ng-click="clearWhiteboard()"/>
+            </div>
+
+            <div class="button-bar-inline" style="position:absolute;right:0">
+                <button class="button icon ion-android-archive" ng-click="saveCanvasToFile()" data-ng-class="false ? 'disabled' : ''"/>
+                <button class="button icon ion-android-share" data-ng-class="true ? 'disabled' : ''"/>
+            </div>
+        </div>
+
+        <!--<div id="debugPanel"  style="background-color: #eeeeee">
+            <button ng-click="saveCanvasToFile()">XX</button>
+        </div>-->
+
+        <div id="draggableContainer" style="position: absolute; bottom: 70px; top: 68px; left: 0px; right: 0px">
+            <!--<draggable-item id="1" src="images/thumbs/owl1.jpg"/>-->
+            <img id="pictureImg" width="100px" height="100px"/>
+        </div>
+
+        <div class="item item-light" style="position: absolute; bottom: 5px; left: 0px; right: 0px; padding: 5px; margin: 0px; height: 63px;">
+            <carousel>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl1.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl2.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl3.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl4.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl5.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl6.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl7.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl8.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl1.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl2.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl3.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl4.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl5.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl6.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl7.jpg" alt="Lazy Owl Image"></div>
+                <div ><img class="thumb-img" style="max-width: 100%" ng-src="images/thumbs/owl8.jpg" alt="Lazy Owl Image"></div>
+            </carousel>
+        </div>
+
+        <!--
+        http://www.gmarwaha.com/jquery/jcarousellite/
+        http://www.smoothdivscroll.com/index.html --stad obrazki mozna next/prev wziac
+        http://sorgalla.com/jcarousel/examples/ajax/
+        -->
+
+    </div>
+</div>
