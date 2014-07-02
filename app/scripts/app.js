@@ -14,6 +14,7 @@ var sioWebApp = angular.module('sioWebApp', [
 	'interact',
 	'ionic',
 	'ng-cordova',
+	'hmTouchEvents',
 	'sioWebApp.config',
 	'sioWebApp.mock',
 	'sioWebApp.common',
@@ -62,6 +63,15 @@ sioWebApp.config(['$stateProvider','$urlRouterProvider','loggerProvider', functi
 sioWebApp.run(['$rootScope','configuration','logger','_', function($rootScope,configuration, logger, _) {
 
 	FastClick.attach(document.body, {});
+	
+	//TEST hammer plugins
+	Hammer.plugins.showTouches();
+	Hammer.plugins.fakeMultitouch();
+	
+	/* var hammertime = Hammer(element, {
+        drag: false,
+        transform: false
+    });*/
 
 	$rootScope.app = configuration;
 
