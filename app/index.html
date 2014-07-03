@@ -5,17 +5,21 @@
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 	<title></title>
 
-	<!-- endbower -->
-	<!-- endbuild -->
 	<!-- build:css(.tmp) styles/main.css -->
-	<link rel="stylesheet" href="styles/ionic.css" />
+	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css" />
+	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css" />
+	<!-- endbower -->
+	<!--<link rel="stylesheet" href="styles/ionic.css" />-->
 	<link rel="stylesheet" href="styles/main.css">
 	<link rel="stylesheet" href="styles/owl.carousel.css">
 	<link rel="stylesheet" href="styles/owl.theme.css">
 	<!-- endbuild -->
+
 </head>
 
 <body ng-app="sioWebApp" animation="slide-left-right-ios7" style="height: 100%">
+
 
 <div class="bar bar-header bar-energized">
 	<h1 class="title">Header Buttons</h1>
@@ -23,17 +27,19 @@
 </div>
 
 <div ui-view></div>
+<!--<div id="dragContainer" style="width: 600px; height: 1000px; background-color: #ffe5e5">
+	<draggable-item id="hitarea" src="images/thumbs/owl2.jpg" />
+</div>-->
+
 
 <!-- grunt wiredep:app -->
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
-<script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/json3/lib/json3.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/toastr/toastr.js"></script>
-<script src="bower_components/angular-loading-bar/src/loading-bar.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/ocLazyLoad/dist/ocLazyLoad.min.js"></script>
 <script src="bower_components/underscore/underscore.js"></script>
@@ -47,8 +53,9 @@
 <script src="bower_components/html2canvas/build/html2canvas.js"></script>
 <script src="bower_components/hammerjs/hammer.js"></script>
 <script src="bower_components/angular-hammer/angular-hammer.js"></script>
+<script src="bower_components/jquery-hammerjs/jquery.hammer.js"></script>
 <!-- endbower -->
-<script src="bower_components/interact/interact-module.js"></script>
+<!--<script src="bower_components/interact/interact-module.js"></script>-->
 <!-- endbuild -->
 
 <script src="libs/ng-cordova.js"></script>
@@ -56,8 +63,8 @@
 <script src="cordova.js"></script>
 
 <!--TMP::not dist-->
-<script src="tmp/hammer.fakemultitouch"></script>
-<script src="tmp/hammer.showtouches"></script>
+<script src="tmp/hammer.fakemultitouch.js"></script>
+<script src="tmp/hammer.showtouches.js"></script>
 <script src="tmp/wallpaper.js"></script>
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -102,6 +109,26 @@
 <script src="tmp/CameraConstants.js"></script>
 <script src="tmp/CameraPopoverHandle.js"></script>
 <script src="tmp/CameraPopoverOptions.js"></script>-->
+
+
+<script>
+	FastClick.attach(document.body, {});
+
+	if(!Hammer.HAS_TOUCHEVENTS && !Hammer.HAS_POINTEREVENTS) {
+		Hammer.plugins.showTouches();
+	}
+
+	if(!Hammer.HAS_TOUCHEVENTS && !Hammer.HAS_POINTEREVENTS) {
+		Hammer.plugins.fakeMultitouch();
+	}
+
+	/*var hammertime = Hammer(document.getElementById("hitarea"),{
+		preventDefault: true,
+		gesture: true
+	}).on("tap", function(event) {
+		alert('hello!');
+	});*/
+</script>
 
 
 </body>

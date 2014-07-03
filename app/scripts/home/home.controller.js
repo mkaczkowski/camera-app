@@ -9,17 +9,42 @@
  */
 angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionicPopup,$ionicLoading, $timeout, imageService, cameraService, mySharedService) {
 
-    var loading;
-    var show = function() {
-        loading = $ionicLoading.show({
-            content: 'Processing...'
-        });
-    };
+	var loading;
+	var show = function() { loading = $ionicLoading.show({ content: 'Processing...' }); };
+	var hide = function(){ if(!loading) return; loading.hide(); };
 
-    var hide = function(){
-        if(!loading) return;
-        loading.hide();
-    };
+	$scope.isSelected = false;
+
+	$scope.$watch(mySharedService.message, function() {
+		console.info("watch:"+mySharedService.message);
+		$scope.isSelected = mySharedService.message;
+	}, true);
+
+	$scope.$on('handleBroadcast', function() {
+		console.info("handleBroadcast:"+mySharedService.message);
+		$scope.isSelected = mySharedService.message;
+	});
+
+
+	$scope.resetElement = function(){
+		console.log("resetElement");
+		mySharedService.resetElement();
+	};
+
+	$scope.removeElement = function(){
+		console.log("remove Element");
+		mySharedService.removeElement();
+	};
+
+	$scope.moveUp = function(){
+		console.log("up");
+		mySharedService.moveUp();
+	};
+
+	$scope.moveDown = function(){
+		console.log("down");
+		mySharedService.moveDown();
+	};
 
     $scope.saveCanvasToFile = function(){
         show();
@@ -67,4 +92,7 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
             console.log('Thank you for not eating my delicious ice cream cone');
         });
     };
+
+	mySharedService.init();
+
 });

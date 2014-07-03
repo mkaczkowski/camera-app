@@ -2,8 +2,116 @@
 var mySharedService = angular.module('sioWebApp.common').factory('mySharedService', function($rootScope) {
 	var sharedService = {};
 
-	sharedService.zIndex = 1;
-	sharedService.message = '';
+	var elements = {};
+
+	var elementData = {
+		posX : 0,
+		posY : 0,
+		lastPosX : 0,
+		lastPosY : 0,
+		bufferX : 0,
+		bufferY : 0,
+		scale : 1,
+		last_scale : 1,
+		rotation : 0,
+		last_rotation : 0,
+		dragReady : 0
+	}
+
+	var currentElement = {};
+	var currentElementData = {};
+
+	sharedService.init = function() {
+		var options = {
+			transform_always_block: true,
+			transform_min_scale: 1,
+			drag_block_horizontal: true,
+			drag_block_vertical: true,
+			drag_min_distance: 0
+		};
+
+		angular.element("#draggableContainer").hammer(options)
+				.on('touch drag dragend transform transformend', function(ev) {
+
+					if(angular.element(ev.target).is( "button" )){
+						return true;
+					}
+
+					if(!ev.gesture){
+						return;
+					}
+
+					ev.gesture.preventDefault();
+
+					if(ev.type == "touch"){
+						currentElement = ev.gesture.target.parentNode;
+						currentElementData = sharedService.getElement(currentElement.className)
+					}
+
+					manageMultitouch(ev,currentElement,currentElementData);
+				});
+	};
+
+	function manageMultitouch(ev,elementObj,elementData) {
+		var transform;
+		switch (ev.type) {
+			case 'touch':
+				break;
+			case 'drag':
+				elementData.posX = ev.gesture.deltaX + elementData.lastPosX;
+				elementData.posY = ev.gesture.deltaY + elementData.lastPosY;
+				transform = "translate(" + elementData.posX + "px," + elementData.posY + "px)";
+				transform += "rotate(" + elementData.last_rotation + "deg) ";
+				transform += "scale(" + elementData.last_scale + "," + elementData.last_scale + ")";
+				break;
+			case 'transform':
+				elementData.rotation = elementData.last_rotation + ev.gesture.rotation;
+				elementData.scale = Math.max(1, Math.min(elementData.last_scale * ev.gesture.scale, 10));
+				transform = "translate(" + elementData.lastPosX + "px," + elementData.lastPosY + "px) ";
+				transform += "rotate(" + elementData.rotation + "deg) ";
+				transform += "scale(" + elementData.scale + "," + elementData.scale + ")";
+				break;
+			case 'transformend':
+				elementData.last_scale = elementData.scale;
+				elementData.last_rotation = elementData.rotation;
+				break;
+			case 'dragend':
+				elementData.lastPosX = elementData.posX;
+				elementData.lastPosY = elementData.posY;
+				break;
+		}
+
+		sharedService.applyTransform(elementObj,transform)
+	}
+
+	sharedService.applyTransform = function (elementObj, transform) {
+		console.info("trans:"+transform)
+		if(transform){
+			elementObj.style.transform = transform;
+			elementObj.style.oTransform = transform;
+			elementObj.style.msTransform = transform;
+			elementObj.style.mozTransform = transform;
+			elementObj.style.webkitTransform = transform;
+		}
+	}
+
+	sharedService.addElement = function (element, scope) {
+		element.first().css({top:scope.top,left:scope.left});
+		element.addClass(makeid());
+		elements[element.get(0).className] = JSON.parse(JSON.stringify(elementData));
+
+		function makeid() {
+			var text = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			for( var i=0; i < 5; i++ )
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+			return text;
+		}
+	};
+
+	sharedService.getElement = function (element) {
+		return elements[element];
+	};
 
 	sharedService.prepForBroadcast = function(msg) {
 		this.message = msg;
@@ -14,9 +122,34 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
 		$rootScope.$broadcast('handleBroadcast');
 	};
 
+	sharedService.moveUp = function(){
+		$rootScope.$broadcast('moveUp');
+	};
+
+	sharedService.moveDown = function(){
+		$rootScope.$broadcast('moveDown');
+	};
+
+	sharedService.removeElement = function(){
+		$rootScope.$broadcast('removeElement');
+		this.prepForBroadcast(null);
+	};
+
 	sharedService.clearAll = function() {
 		$rootScope.$broadcast('clearAll');
+		this.prepForBroadcast(null);
 	};
+
+	sharedService.resetElement = function(){
+		currentElementData = JSON.parse(JSON.stringify(elementData));
+		elements[currentElement.className] = currentElementData;
+		var transform = "translate(" + currentElementData.lastPosX + "px," + currentElementData.lastPosY + "px) ";
+		transform += "rotate(" + currentElementData.rotation + "deg) ";
+		transform += "scale(" + currentElementData.scale + "," + currentElementData.scale + ")";
+		sharedService.applyTransform(currentElement, transform);
+	};
+
+	sharedService.message;
 
 	return sharedService;
 });
@@ -34,33 +167,11 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
 		},
 		controller: function($scope, $element, mySharedService){
 			$scope.isSelected = true;
-
-			$scope.removeElement = function(){
-				$element.remove();
-			};
-
-			$scope.moveUp = function(){
-				//var imgElement = angular.element($element.children()[0]);
-				var imgElement = $element;
-				var zIndex = parseInt(imgElement.css( "zIndex"));
-				console.log(zIndex)
-				imgElement.css( "zIndex", zIndex+1 );
-			};
-
-			$scope.moveDown = function(){
-				///var imgElement = angular.element($element.children()[0]);
-				var imgElement = $element;
-				var zIndex = parseInt(imgElement.css( "zIndex"));
-				console.log(zIndex)
-				if(zIndex == 0) return;
-				imgElement.css( "zIndex", zIndex-1  );
-			};
-
 			mySharedService.prepForBroadcast($element);
 		},
 		link: function (scope, element) {
 
-			element.css({top:scope.top,left:scope.left});
+			mySharedService.addElement(element, scope);
 
 			scope.$on('handleBroadcast', function() {
 				var tmpIsSelected = (mySharedService.message == element);
@@ -71,6 +182,30 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
 					verifyBorder();
 				}
 			});
+
+			scope.$on('removeElement', function() {
+				if(scope.isSelected){
+					element.remove();
+				}
+			});
+
+			scope.$on('moveUp', function() {
+				if(scope.isSelected){
+					var zIndex = parseInt(element.css( "zIndex"));
+					console.log(zIndex)
+					element.css( "zIndex", zIndex+1 );
+				}
+			});
+
+			scope.$on('moveDown', function() {
+				if(scope.isSelected){
+					var zIndex = parseInt(element.css( "zIndex"));
+					console.log(zIndex)
+					if(zIndex == 0) return;
+					element.css( "zIndex", zIndex-1  );
+				}
+			});
+
 
 			scope.$on('clearAll', function() {
 				scope.removeElement();
@@ -87,77 +222,16 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
 
 			verifyBorder();
 
-			interact(element.get( 0 ))
-					.draggable({
-						onStart:function (event) {
-							var targetElement = angular.element(target);
-							var imgElement = angular.element(targetElement.children()[0]);
-							if(!imgElement.hasClass("selectedDraggable")){
-								interact.stop(event);
-							}
-						},
-						onmove: function (event) {
-							var target = event.target;
-							target.x = (target.x|0) + event.dx;
-							target.y = (target.y|0) + event.dy;
-							target.style.webkitTransform = target.style.transform =
-									'translate(' + target.x + 'px, ' + target.y + 'px)';
-						}
-					})
-					.on('dragend', function (event) {
-						console.log('dragged a distance of ' + Math.sqrt(event.dx*event.dx + event.dy*event.dy) + ' pixels to ' + event.pageX + ', ' + event.pageY);
-					})
-					.inertia(true)
-					.restrict({ drag: 'parent' });
-
-
-			//resize
-			var angle = 0;
-
-			interact(element.get( 0 )).gesturable({
-				onmove: function (event) {
-					var arrow = element.get( 0 );
-					angle += event.da;
-					arrow.style.webkitTransform = arrow.style.transform = 'rotate(' + angle + 'deg)';
-				}
-			});
-
-			var scale = 1;
-			var scaleElement =  element.get( 0 );
-			var resetTimeout;
-
-			interact(element.get( 0 )).gesturable({
-				onstart: function (event) {
-					clearTimeout(resetTimeout);
-					scaleElement.classList.remove('reset');
-				},
-				onmove: function (event) {
-					scale = scale * (1 + event.ds);
-					scaleElement.style.webkitTransform = scaleElement.style.transform = 'scale(' + scale + ')';
-
-				},
-				onend: function (event) {
-					resetTimeout = setTimeout(reset, 1000);
-					scaleElement.classList.add('reset');
-				}
-			});
-			function reset () {
-				scale = 1;
-				scaleElement.style.webkitTransform = scaleElement.style.transform = 'scale(1)';
-			}
-
-			// prevent browser's native drag on the image
-			element.on('dragstart', function (event) {
-				event.preventDefault();
-			})
-
 			element.bind('click touchstart', function (event) {
 				mySharedService.prepForBroadcast(element);
 			})
+
+			element.on('$destroy', function() {
+				//console.log("destroy element");
+			});
 		}
 	};
 })
-
 
 angular.module('sioWebApp.common').directive('carousel', function($compile, mySharedService) {
 	return {
@@ -209,6 +283,8 @@ angular.module('sioWebApp.common').directive('carousel', function($compile, mySh
 					containerElement.append(newElement);
 				})
 			}
+
+
 		}
 	};
 });
