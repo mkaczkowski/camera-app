@@ -18,19 +18,15 @@
 
 </head>
 
-<body ng-app="sioWebApp" animation="slide-left-right-ios7" style="height: 100%">
+<body ng-app="sioWebApp" data-ng-controller="AppCtrl"  style="height: 100%">
 
 
 <div class="bar bar-header bar-energized">
-	<h1 class="title">Header Buttons</h1>
-	<button class="button icon ion-android-star"></button>
+	<h1 class="title">Saiyan Camera</h1>
+	<button class="button icon ion-android-star" ng-click="rateUs()"></button>
 </div>
 
-<div ui-view></div>
-<!--<div id="dragContainer" style="width: 600px; height: 1000px; background-color: #ffe5e5">
-	<draggable-item id="hitarea" src="images/thumbs/owl2.jpg" />
-</div>-->
-
+<ng-include src="'views/home/home.html'"></ng-include>
 
 <!-- grunt wiredep:app -->
 <!-- build:js(.) scripts/vendor.js -->
@@ -39,22 +35,20 @@
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/json3/lib/json3.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/ocLazyLoad/dist/ocLazyLoad.min.js"></script>
 <script src="bower_components/underscore/underscore.js"></script>
 <script src="bower_components/angular-underscore-module/angular-underscore-module.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/ionic/release/js/ionic.js"></script>
 <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
 <script src="bower_components/fastclick/lib/fastclick.js"></script>
 <script src="bower_components/html2canvas/build/html2canvas.js"></script>
 <script src="bower_components/hammerjs/hammer.js"></script>
-<script src="bower_components/angular-hammer/angular-hammer.js"></script>
 <script src="bower_components/jquery-hammerjs/jquery.hammer.js"></script>
+<script src="bower_components/angular-hammer/angular-hammer.js"></script>
 <!-- endbower -->
-<!--<script src="bower_components/interact/interact-module.js"></script>-->
 <!-- endbuild -->
 
 <script src="libs/ng-cordova.js"></script>
@@ -65,6 +59,8 @@
 <script src="tmp/hammer.fakemultitouch.js"></script>
 <script src="tmp/hammer.showtouches.js"></script>
 <script src="tmp/wallpaper.js"></script>
+<script src="tmp/CameraConstants.js"></script>
+<script src="tmp/CameraPopoverOptions.js"></script>
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <!--_main-->
@@ -86,29 +82,17 @@
 <script src="scripts/common/directives/draggable.directive.js"></script>
 
 <script src="scripts/common/util/ny-logger.provider.js"></script>
-<script src="scripts/common/file/file.controller.js"></script>
+<!--<script src="scripts/common/file/file.controller.js"></script>-->
+<script src="scripts/common/network/network.service.js"></script>
 <script src="scripts/common/file/image.service.js"></script>
-<script src="scripts/common/network/network.controller.js"></script>
-<script src="scripts/common/notification/notification.controller.js"></script>
+<script src="scripts/common/notification/notification.service.js"></script>
 <script src="scripts/common/picture/camera.service.js"></script>
-<script src="scripts/common/sharing/sharing.controller.js"></script>
-<script src="scripts/common/util/restHelper.service.js"></script>
-
-<script src="scripts/friends/friends._module.js"></script>
-<script src="scripts/friends/friends.controller.js"></script>
-<script src="scripts/friends/friends.services.js"></script>
+<script src="scripts/common/sharing/sharing.service.js"></script>
 
 <!-- fileblock:js mock -->
 <script src="scripts/_mock/mock-off.module.js"></script>
 <!-- endfileblock -->
 <!-- endbuild -->
-
-<!--NG-CORDOVA-->
-<!--<script src="tmp/Camera.js"></script>
-<script src="tmp/CameraConstants.js"></script>
-<script src="tmp/CameraPopoverHandle.js"></script>
-<script src="tmp/CameraPopoverOptions.js"></script>-->
-
 
 <script>
 	FastClick.attach(document.body, {});
@@ -120,13 +104,6 @@
 	if(!Hammer.HAS_TOUCHEVENTS && !Hammer.HAS_POINTEREVENTS) {
 		Hammer.plugins.fakeMultitouch();
 	}
-
-	/*var hammertime = Hammer(document.getElementById("hitarea"),{
-		preventDefault: true,
-		gesture: true
-	}).on("tap", function(event) {
-		alert('hello!');
-	});*/
 </script>
 
 

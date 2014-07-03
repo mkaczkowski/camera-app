@@ -4,7 +4,7 @@ angular.module('sioWebApp.config', [])
 			name : 'SIO2 Backoffice',
 			version : '@@version',
 			copyright : 'Ministerstwo Edukacji Narodowej, Szucha 25, Warszawa',
-			restEndpoint: '@@restEndpoint',
+            marketUrl: 'your.app.bundle.id',
 			isProd: JSON.parse('@@isProd')
 		}
 );
