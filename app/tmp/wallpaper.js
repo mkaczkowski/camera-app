@@ -28,4 +28,4 @@ var wallpaper =  {
             
     }
 };
-module.exports = wallpaper;
+//module.exports = wallpaper;

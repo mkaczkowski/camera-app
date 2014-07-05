@@ -1,41 +1,119 @@
 {
-	"items" : [
-		{
-			"img": "images/thumbs/owl1",
-			"ext": ".jpg",
-			"height":"200",
-			"width":"300"
-		},
-		{
-			"img": "images/thumbs/owl2",
-			"ext": ".jpg",
-			"height":"200",	
-			"width":"300"
-		},
-		{
-			"img": "images/thumbs/owl3",
-			"ext": ".jpg",
-			"height":"200",
-			"width":"300"
-		},
-		{
-			"img": "images/thumbs/owl4",
-			"ext": ".jpg",
-			"height":"200",
-			"width":"300"
-		},
-		{
-			"img": "images/thumbs/owl5",
-			"ext": ".jpg",
-			"height":"200",
-			"width":"300"
-		},
-		{
-			"img": "images/thumbs/owl6",
-			"ext": ".jpg",
-			"height":"200",
-			"width":"300"
-		}
-	]
+    "items": [
+        {
+            "img": "data/images/hair1",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/hair2",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/hair3",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/hair4",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/hair5",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/hair6",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/aura1",
+            "height": "300",
+            "width": "200"
+        },
+        {
+            "img": "data/images/aura3",
+            "height": "300",
+            "width": "200"
+        },
+        {
+            "img": "data/images/aura4",
+            "height": "300",
+            "width": "200"
+        },
+        {
+            "img": "data/images/aura5",
+            "height": "300",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam1",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam10",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam11",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam2",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam3",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam4",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam5",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam6",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam7",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam8",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/beam9",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/boom2",
+            "height": "200",
+            "width": "200"
+        },
+        {
+            "img": "data/images/boom3",
+            "height": "200",
+            "width": "200"
+        }
+    ]
 }
-
