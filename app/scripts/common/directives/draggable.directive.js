@@ -15,7 +15,8 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
         last_scale : 1,
         rotation : 0,
         last_rotation : 0,
-        dragReady : 0
+        dragReady : 0,
+        isMirror:false
     }
 
     var currentElement = {};
@@ -41,17 +42,22 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
 
             ev.gesture.preventDefault();
 
-            if(ev.type == "touch"){
-                currentElement = ev.gesture.target.parentNode;
-                currentElementData = sharedService.getElement(currentElement.className)
+            if(ev.gesture.target.id == "draggableContainer"){
+                sharedService.prepForBroadcast(null);
+                return;
             }
 
-            manageMultitouch(ev,currentElement,currentElementData);
+            if(ev.type == "touch"){
+                sharedService.currentElement = ev.gesture.target.parentNode;
+                sharedService.currentElementData = sharedService.getElement(sharedService.currentElement.className)
+            }
+
+            manageMultitouch(ev,sharedService.currentElement,sharedService.currentElementData);
         });
     };
 
     function manageMultitouch(ev,elementObj,elementData) {
-        var transform;
+            var transform;
         switch (ev.type) {
             case 'touch':
                 break;
@@ -60,14 +66,14 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
                 elementData.posY = ev.gesture.deltaY + elementData.lastPosY;
                 transform = "translate(" + elementData.posX + "px," + elementData.posY + "px)";
                 transform += "rotate(" + elementData.last_rotation + "deg) ";
-                transform += "scale(" + elementData.last_scale + "," + elementData.last_scale + ")";
+                transform += "scale(" + (elementData.isMirror ? -elementData.last_scale : elementData.last_scale) + "," + elementData.last_scale + ")";
                 break;
             case 'transform':
                 elementData.rotation = elementData.last_rotation + ev.gesture.rotation;
                 elementData.scale = Math.max(0.4, Math.min(elementData.last_scale * ev.gesture.scale, 5));
                 transform = "translate(" + elementData.lastPosX + "px," + elementData.lastPosY + "px) ";
                 transform += "rotate(" + elementData.rotation + "deg) ";
-                transform += "scale(" + elementData.scale + "," + elementData.scale + ")";
+                transform += "scale(" + (elementData.isMirror ? -(elementData.scale) : elementData.scale) + "," + elementData.scale + ")";
                 break;
             case 'transformend':
                 elementData.last_scale = elementData.scale;
@@ -96,7 +102,13 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
     sharedService.addElement = function (element, scope) {
         element.first().css({top:scope.top,left:scope.left});
         element.addClass(makeid());
-        elements[element.get(0).className] = JSON.parse(JSON.stringify(elementData));
+
+        var newElement = element.get(0);
+        var newData = JSON.parse(JSON.stringify(elementData));
+        elements[newElement.className] = newData;
+
+        sharedService.currentElement = newElement;
+        sharedService.currentElementData = newData;
 
         function makeid() {
             var text = "";
@@ -128,6 +140,15 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
         $rootScope.$broadcast('moveDown');
     };
 
+    sharedService.mirror = function(){
+
+        sharedService.currentElementData.isMirror = !sharedService.currentElementData.isMirror;
+        var transform = "translate(" + sharedService.currentElementData.lastPosX + "px," + sharedService.currentElementData.lastPosY + "px) ";
+        transform += "rotate(" + sharedService.currentElementData.last_rotation + "deg) ";
+        transform += "scale(" + (sharedService.currentElementData.isMirror ? -sharedService.currentElementData.last_scale : sharedService.currentElementData.last_scale) + "," + sharedService.currentElementData.last_scale + ")";
+        sharedService.applyTransform(sharedService.currentElement,transform);
+    };
+
     sharedService.removeElement = function(){
         $rootScope.$broadcast('removeElement');
         this.prepForBroadcast(null);
@@ -139,12 +160,12 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
     };
 
     sharedService.resetElement = function(){
-        currentElementData = JSON.parse(JSON.stringify(elementData));
+        sharedService.currentElementData = JSON.parse(JSON.stringify(elementData));
         elements[currentElement.className] = currentElementData;
-        var transform = "translate(" + currentElementData.lastPosX + "px," + currentElementData.lastPosY + "px) ";
-        transform += "rotate(" + currentElementData.rotation + "deg) ";
-        transform += "scale(" + currentElementData.scale + "," + currentElementData.scale + ")";
-        sharedService.applyTransform(currentElement, transform);
+        var transform = "translate(" + sharedService.currentElementData.lastPosX + "px," + sharedService.currentElementData.lastPosY + "px) ";
+        transform += "rotate(" + sharedService.currentElementData.rotation + "deg) ";
+        transform += "scale(" + sharedService.currentElementData.scale + "," + sharedService.currentElementData.scale + ")";
+        sharedService.applyTransform(sharedService.currentElement, transform);
     };
 
     sharedService.message;

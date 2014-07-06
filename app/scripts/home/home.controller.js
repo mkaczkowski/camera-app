@@ -18,11 +18,7 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
 
     $scope.isEmpty = true;
     $scope.isSelected = false;
-
-    /*$scope.$watch(mySharedService.message, function() {
-     console.info("watch:"+mySharedService.message);
-     $scope.isSelected = mySharedService.message;
-     }, true);*/
+    $scope.isExpanded = true;
 
     $scope.$on('handleBroadcast', function() {
         $scope.isSelected = mySharedService.message;
@@ -43,18 +39,25 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
     };
 
     $scope.moveUp = function(){
-        console.log("up");
         mySharedService.moveUp();
     };
 
     $scope.moveDown = function(){
-        console.log("down");
         mySharedService.moveDown();
     };
 
+    $scope.mirror = function(){
+        mySharedService.mirror();
+    };
+
     $scope.hideToolbar = function(){
-        //$scope.isSelected=false;
-        mySharedService.prepForBroadcast(null);
+        //mySharedService.prepForBroadcast(null);
+        $scope.isExpanded = false;
+    };
+
+    $scope.showToolbar = function(){
+        //mySharedService.prepForBroadcast(null);
+        $scope.isExpanded = true;
     };
 
     $scope.saveCanvasToFile = function(successHandler){
@@ -63,22 +66,24 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
         $timeout(function(){
             html2canvas( [ document.getElementById('draggableContainer') ], {
                 onrendered: function(canvas) {
+
                     imageService.saveCanvasToFile(canvas,
                         function(msg){
                             hide();
                             if(successHandler){
                                 successHandler(msg)
                             }else{
-                                notificationService.showInfo("Picture is saved!")
+                                notificationService.savedConfirm(msg,
+                                    function (path) {$scope.sharePicure(path)});
                             }
                         },function(err){
                             hide();
                             console.log("saveCanvasToFile err:"+err)
-                            notificationService.showError("Sorry, there was an error :(")
+                            notificationService.showError("Ooops. Something went wrong.")
                         });
                 }
             });
-        },2000);
+        },500);
     };
 
     $scope.sharePicure = function(){
