@@ -247,7 +247,7 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
                 if(!scope.isSelected){
                     imgElement.removeClass("selectedDraggable").css("border","");
                 }else{
-                    imgElement.addClass("selectedDraggable").css("border","3px dashed #545565");
+                    imgElement.addClass("selectedDraggable").css("border","3px dashed rgb(84, 85, 101);");
                 }
             }
 
