@@ -16,32 +16,15 @@ angular.module('sioWebApp.common').factory('notificationService', function($cord
         });
     };
 
-    notificationService.showSavedInfo = function(scope, imgPath) {
-
-        // An elaborate, custom popup
-        var myPopup = $ionicPopup.show({
-            //template: '<input>',//'<img src="data/images/misc1.png"/>',//'<img src="'+imgPath+'">',
-            template: '<div>dasda a das</div>',
-            scope: scope,
-            title: 'Enter Wi-Fi Password',
-            buttons: [
-                { text: 'Cancel' },
-                {
-                    text: '<b>Save</b>',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        return true;
-                    }
-                }
-            ]
-        });
-        myPopup.then(function(res) {
-            console.log('Tapped!', res);
-        });
-        /*$timeout(function() {
-            myPopup.close(); //close the popup after 3 seconds for some reason
-        }, 3000);*/
-    };
+	notificationService.showInfo = function(msg) {
+		var alertPopup = $ionicPopup.alert({
+			title: msg,
+			okType: 'button-energized'
+		});
+		alertPopup.then(function(res) {
+			console.log('showAlert closed.');
+		});
+	};
 
 
     notificationService.savedConfirm =function(path, handler1) {
@@ -93,6 +76,33 @@ angular.module('sioWebApp.common').factory('notificationService', function($cord
                 ]
             });
     };
+
+	notificationService.showInitPopup = function(handler1,handler2) {
+		var alertPopup = $ionicPopup.show({
+			title: 'Welcome!', // String. The title of the popup.
+			subTitle: 'Please take a picture or choose from gallery', // String (optional). The sub-title of the popup.
+			scope: null, // Scope (optional). A scope to link to the popup content.
+			buttons: [{ //Array[Object] (optional). Buttons to place in the popup footer.
+				text: 'Camera',
+				type: 'button-energized',
+				onTap: function(e) {
+					handler1();
+					return true;
+				}
+			}, {
+				text: 'Gallery',
+				type: 'button-energized',
+				onTap: function(e) {
+					handler2();
+					return true;
+				}
+			}]
+		});
+
+		alertPopup.then(function(res) {
+			console.log('showAlert closed.');
+		});
+	};
 
     return notificationService;
 });

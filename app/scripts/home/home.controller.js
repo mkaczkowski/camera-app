@@ -64,8 +64,11 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
         show();
         mySharedService.prepForBroadcast(null);
         $timeout(function(){
-            html2canvas( [ document.getElementById('draggableContainer') ], {
+            html2canvas( [ document.getElementById('canvas') ], {
                 onrendered: function(canvas) {
+
+				/*	var dataUrl = canvas.toDataURL();
+					window.open(dataUrl);*/
 
                     imageService.saveCanvasToFile(canvas,
                         function(msg){
@@ -93,7 +96,7 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
     };
 
     $scope.getPicture = function(){
-        cameraService.takePicture("pictureImg");
+        cameraService.takePicture("pictureContainer");
     };
 
     $scope.clearWhiteboard = function(){
@@ -104,5 +107,10 @@ angular.module('sioWebApp.home').controller('HomeCtrl', function ($scope, $ionic
             });
     };
 
+	$scope.loadImage = function(){
+		cameraService.loadImageFromLibrary("pictureContainer");
+	};
+
     mySharedService.init();
+	notificationService.showInitPopup($scope.getPicture,$scope.loadImage);
 });

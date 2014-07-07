@@ -1,10 +1,10 @@
 'use strict';
 angular.module('sioWebApp.config', [])
 		.constant('configuration', {
-			name : 'SIO2 Backoffice',
-			version : 'SIO2 Backoffice v.2.0',
-			copyright : 'Ministerstwo Edukacji Narodowej, Szucha 25, Warszawa',
-            marketUrl: 'your.app.bundle.id',
-			isProd: JSON.parse('false')
+			name : 'Dragon Camera',
+			barStyle : 'bar-energized',
+			version : '1.0.0',
+            marketUrl: 'com.dragon.camera2',
+			isProd: JSON.parse('true')
 		}
 );

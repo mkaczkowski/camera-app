@@ -1,5 +1,5 @@
 {
+	"name": "Dragon Camera2",
 	"isProd": true,
-	"version": "SIO2 Backoffice v.1.0",
-	"restEndpoint": ""
+	"version": "1.0.0"
 }

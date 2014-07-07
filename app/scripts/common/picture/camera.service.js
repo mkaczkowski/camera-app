@@ -1,38 +1,52 @@
 angular.module('sioWebApp.common').factory('cameraService', function($cordovaCamera, notificationService) {
-    var cameraService = {};
+	var cameraService = {};
 
-    cameraService.options = {
-        quality : 50,
-        destinationType : Camera.DestinationType.DATA_URL ,
-        sourceType : Camera.PictureSourceType.CAMERA ,
-        allowEdit : true,
-        encodingType: Camera.EncodingType.JPEG,
-        targetWidth: 100,
-        targetHeight: 100,
-        popoverOptions: CameraPopoverOptions,
-        saveToPhotoAlbum: false
-    };
+	cameraService.takePhotoOptions = {
+		quality : 100,
+		destinationType : Camera.DestinationType.DATA_URL ,
+		sourceType : Camera.PictureSourceType.CAMERA ,
+		allowEdit : true,
+		encodingType: Camera.EncodingType.JPEG,
+		saveToPhotoAlbum: false,
+		correctOrientation:true
+	};
 
-    cameraService.getPicture2 = function(dest){
-        $cordovaCamera.getPicture(cameraService.options).then(function(imageData){
-                var image = document.getElementById(dest);
-                image.src = "data:image/jpeg;base64," + imageData
-            }, function(err) {
-                console.error("error!!:"+err)
-                notificationService.showError("Sorry, there was an error :(")
-            }
-        )
-    }
+	cameraService.loadImageOptions = {
+		quality: 100,
+		destinationType: Camera.DestinationType.FILE_URI,
+		sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM
+	};
 
-    cameraService.takePicture = function(dest) {
-        navigator.camera.getPicture(function(imageData) {
-            var image = document.getElementById(dest);
-            image.src = "data:image/jpeg;base64," + imageData
-        }, function(err) {
-            notificationService.showError("Sorry, there was an error :(")
-            console.error("error!!:"+err)
-        }, cameraService.options);
+	cameraService.getPicture = function(dest){
+		var canvas = angular.element("#canvas");
+		cameraService.takePhotoOptions.targetWidth = canvas.width();
+		cameraService.takePhotoOptions.targetHeight = canvas.height();
 
-    };
-    return cameraService;
+		$cordovaCamera.getPicture(cameraService.takePhotoOptions).then(function(imageData){
+					console.log("cameraService.getPicture2 success:"+imageData)
+					var image = document.getElementById(dest);
+					image.src = "data:image/jpeg;base64," + imageData
+				}, function(err) {
+					console.error("error!!:"+err)
+					notificationService.showError("Ooops. Something went wrong.")
+				}
+		)
+	};
+
+	cameraService.loadImageFromLibrary = function(dest) {
+		var canvas = angular.element("#canvas");
+		cameraService.loadImageOptions.targetWidth = canvas.width();
+		cameraService.loadImageOptions.targetHeight = canvas.height();
+
+		$cordovaCamera.getPicture(cameraService.loadImageOptions).then(function (imageData) {
+			console.info("loadImageFromLibrary imageURI:" + imageData);
+			var largeImage = document.getElementById(dest);
+			largeImage.style.display = 'block';
+			largeImage.src = imageData;
+		}, function (err) {
+			console.error("error!!:" + err)
+			notificationService.showError("Ooops. Something went wrong.")
+		})
+	};
+	return cameraService;
 });

@@ -8,7 +8,7 @@ angular.module('sioWebApp.common').factory('sharingService', function(configurat
             console.log("shareViaFacebook success! :"+result);
         }, function(err) {
             console.log("shareViaFacebook err:"+err);
-            notificationService.showError("Sorry, there was an error :(")
+            notificationService.showError("Ooops. Something went wrong.");
         });
     };
 

@@ -8,9 +8,16 @@ angular.module('sioWebApp.common').factory('networkService', function($cordovaNe
     };
 
     networkService.openMarketURL = function(url) {
-        //cordova.market.open(url);
-        window.plugins.market.open(url);
+		cordova.market.open(url);
     };
+
+	networkService.openMarketURL2 = function(url) {
+		window.plugins.market.open(url)
+	};
+
+	networkService.openMarketURL3 = function(url) {
+		navigator.market.open(url)
+	};
 
     return networkService;
 });

@@ -48,8 +48,8 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
             }
 
             if(ev.type == "touch"){
-                sharedService.currentElement = ev.gesture.target.parentNode;
-                sharedService.currentElementData = sharedService.getElement(sharedService.currentElement.className)
+				sharedService.currentElement = ev.gesture.target;
+				sharedService.currentElementData = sharedService.getElement(angular.element(sharedService.currentElement).attr("data-id"));
             }
 
             manageMultitouch(ev,sharedService.currentElement,sharedService.currentElementData);
@@ -100,12 +100,12 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
     }
 
     sharedService.addElement = function (element, scope) {
-        element.first().css({top:scope.top,left:scope.left});
-        element.addClass(makeid());
+        element.css({top:scope.top,left:scope.left});
+		element.attr("data-id",makeid());
 
         var newElement = element.get(0);
         var newData = JSON.parse(JSON.stringify(elementData));
-        elements[newElement.className] = newData;
+		elements[element.attr("data-id")] = newData;
 
         sharedService.currentElement = newElement;
         sharedService.currentElementData = newData;
@@ -160,7 +160,7 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
     };
 
     sharedService.resetElement = function(){
-        sharedService.currentElementData = JSON.parse(JSON.stringify(elementData));
+        sharedService.currentElementData = JSON.parse(JSON.stringify(sharedService.elementData));
         elements[currentElement.className] = currentElementData;
         var transform = "translate(" + sharedService.currentElementData.lastPosX + "px," + sharedService.currentElementData.lastPosY + "px) ";
         transform += "rotate(" + sharedService.currentElementData.rotation + "deg) ";
@@ -176,7 +176,7 @@ var mySharedService = angular.module('sioWebApp.common').factory('mySharedServic
 angular.module('sioWebApp.common').directive("draggableItem", function (mySharedService) {
     return {
         restrict: 'E',
-        templateUrl: 'views/directives/draggable.html',
+		template: '<img class="drag-and-drop" data-ng-src="{{src}}" style="padding: 8px;max-height: 100%;max-width: 100%;position: absolute;z-index: 1">',
         replace: true,
         piority: 10000,
         scope: {
@@ -243,12 +243,12 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
             });
 
             var verifyBorder = function(){
-                var imgElement = angular.element(element.children()[0]);
-                if(!scope.isSelected){
-                    imgElement.removeClass("selectedDraggable").css("border","");
-                }else{
-                    imgElement.addClass("selectedDraggable").css("border","3px dashed rgb(84, 85, 101);");
-                }
+                var imgElement = element;
+				if(!scope.isSelected){
+					imgElement.removeClass("selectedDraggable").css("border","3px dashed rgba(84, 85, 101, 0)");
+				}else{
+					imgElement.addClass("selectedDraggable").css("border","3px dashed rgba(84, 85, 101, 1)");
+				}
             }
 
             verifyBorder();
@@ -264,7 +264,7 @@ angular.module('sioWebApp.common').directive("draggableItem", function (myShared
     };
 })
 
-angular.module('sioWebApp.common').directive('carousel', function($compile, mySharedService) {
+angular.module('sioWebApp.common').directive('carousel', function($compile) {
     return {
         restrict: 'E',
         replace: true,
@@ -291,7 +291,7 @@ angular.module('sioWebApp.common').directive('carousel', function($compile, mySh
                     var ext = ".png";//data["items"][i].ext;
                     var path = img + ext;
                     var thumb = img +".min" + ext;
-                    content += "<div ><img class='thumb-img' style='max-width: 100%' data-width='"+width+"' data-height='"+height+"' src='"+path+"' ></div>";
+					content += "<div class='item item-light' style='padding: 7px; height: 69px;line-height: 69px;text-align: center;'><img class='thumb-img' style='max-width: 100%; max-height: 100%;' data-width='"+width+"' data-height='"+height+"' src='"+path+"' ></div>";
                 }
                 element.html(content);
                 applyHandlers();
@@ -309,13 +309,9 @@ angular.module('sioWebApp.common').directive('carousel', function($compile, mySh
                     var offsetLeft = (containerElement.width() - widthAttr)/2;
                     var newElement = $compile('<draggable-item id="1" src="'+srcAttr+'" top="'+offsetTop+'px" left="'+offsetLeft+'px"/>')(scope);
 
-
-                    //newElement.css({top:offsetTop+"px",left:offsetLeft+"px"});
                     containerElement.append(newElement);
                 })
             }
-
-
         }
     };
 });

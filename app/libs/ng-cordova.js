@@ -372,6 +372,19 @@ angular.module('ngCordova.plugins.socialSharing', [])
     .factory('$cordovaSocialSharing', ['$q', function ($q) {
 
         return {
+
+			shareImage: function (image) {
+				var q = $q.defer();
+				window.plugins.socialsharing.share(null,null, image, null,
+						function () {
+							q.resolve(true); // success
+						},
+						function () {
+							q.reject(false); // error
+						});
+				return q.promise;
+			},
+
             shareViaTwitter: function (message, image, link) {
                 var q = $q.defer();
                 window.plugins.socialsharing.shareViaTwitter(message, image, link,

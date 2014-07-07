@@ -1,12 +1,4 @@
 'use strict';
-/**
- * @ngdoc overview
- * @name sioWebApp
- * @description
- * # sioWebApp
- *
- * Main module of the application.
- */
 var sioWebApp = angular.module('sioWebApp', [
     'underscore',
     'ionic',
@@ -22,9 +14,6 @@ var sioWebApp = angular.module('sioWebApp', [
     'sioWebApp.home'
 ]);
 
-//    'ngCordova.plugins.file',
-//    'ngCordova.plugins.toast',
-
 sioWebApp.config(function(loggerProvider) {
     loggerProvider.enabled(true);
 });
@@ -33,9 +22,16 @@ sioWebApp.controller('AppCtrl', function ($scope,networkService, configuration) 
     $scope.rateUs = function(){
         networkService.openMarketURL(configuration.marketUrl)
     };
+	$scope.rateUs2 = function(){
+		networkService.openMarketURL2(configuration.marketUrl)
+	};
+	$scope.rateUs3 = function(){
+		networkService.openMarketURL3(configuration.marketUrl)
+	};
+
 });
 
-sioWebApp.run(function($rootScope,configuration,$timeout, logger, _) {
+sioWebApp.run(function($rootScope,configuration) {
 
     $rootScope.app = configuration;
 

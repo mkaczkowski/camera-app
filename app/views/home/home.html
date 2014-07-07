@@ -1,36 +1,33 @@
-<div class="jumbotron" data-ng-controller="HomeCtrl">
+<div class="list card" style="position:absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; margin: 0px 10px;" data-ng-controller="HomeCtrl">
+	<div class="bar bar-header bar-stable" style="height: 55px">
+		<div class="button-bar-inline"  style="position:absolute;left: 0px;">
+			<button class="button button-medium icon ion-android-camera" style="width: 45px;height: 45px" ng-click="getPicture()" />
+			<button class="button button-medium icon ion-android-image" style="width: 45px;height: 45px;margin-left: 4px"  ng-click="loadImage()"/>
+			<button class="button button-medium icon ion-android-trash" style="width: 45px;height: 45px;margin-left: 4px" ng-click="clearWhiteboard()"/>
+		</div>
+		<div class="button-bar-inline" style="position:absolute;right:0">
+			<button class="button button-medium icon ion-android-checkmark" style="width: 45px;height: 45px;margin-left: 4px" data-ng-class="isEmpty ? 'disabled' : ''" ng-click="saveCanvasToFile()"/>
+			<button class="button button-medium icon ion-android-share" style="width: 45px;height: 45px;margin-left: 4px" data-ng-class="isEmpty ? 'disabled' : ''" ng-click="sharePicure()"/>
+		</div>
+	</div>
 
-    <div class="list card" style="position: absolute; bottom: 0px; top: 25px; left: 0px; right: 0px">
+	<div id="canvas" style="position: absolute; bottom: 70px; top: 55px; left: 0px; right: 0px">
+		<img id="pictureContainer" style="position: absolute; height: 100%; width: 100%;">
+		<div id="draggableContainer" style="position: absolute; height: 100%; width: 100%"> <!--draggable elements--> </div>
 
-        <div class="bar bar-header bar-stable" style="height: 55px">
-            <div class="button-bar-inline"  style="position:absolute;left:0;height: 100%">
-                <button class="button button-medium icon ion-android-camera" style="width: 45px;height: 45px" ng-click="getPicture()" />
-                <button class="button button-medium icon ion-android-image" style="width: 45px;height: 45px"/>
-                <button class="button button-medium icon ion-android-trash" style="width: 45px;height: 45px" ng-click="clearWhiteboard()"/>
-            </div>
-            <div class="button-bar-inline" style="position:absolute;right:0">
-                <button class="button button-medium icon ion-android-archive" style="width: 45px;height: 45px" data-ng-class="isEmpty ? 'disabled' : ''" ng-click="saveCanvasToFile()"/>
-                <button class="button button-medium icon ion-android-share" style="width: 45px;height: 45px" data-ng-class="isEmpty ? 'disabled' : ''" ng-click="sharePicure()"/>
-            </div>
-        </div>
+		<div class="button-bar"  ng-show="isSelected && isExpanded" style="position: absolute; bottom: 0px; width: 100%; z-index: 5; background-color: #f8f8f8">
+			<button class="button icon ion-arrow-swap"  ng-click="mirror()"/>
+			<button class="button icon ion-arrow-up-b"   ng-click="moveUp()"/>
+			<button class="button icon ion-arrow-down-b"   ng-click="moveDown()"/>
+			<button class="button icon ion-android-trash" ng-click="removeElement()"/>
+			<button class="button icon ion-android-remove" ng-click="hideToolbar()"/>
+			<!--<button class="button icon ion-refresh" ng-click="resetElement()"/>-->
+			<!--<button class="button icon ion-edit"   ng-click="moveDown()"/>-->
+		</div>
+		<button class="button icon ion-android-add" ng-click="showToolbar()" style="position: absolute; bottom: 0px; right: 0px; z-index: 5; background-color: #f8f8f8;"  ng-show="isSelected && !isExpanded"/>
+	</div>
 
-        <div id="draggableContainer" style="position: absolute; bottom: 70px; top: 55px; left: 0px; right: 0px">
-            <div class="button-bar"  ng-show="isSelected && isExpanded" style="position: absolute; bottom: -1px; left: 0; right: 0px; z-index: 9999; background-color: #f8f8f8">
-                <!--<button class="button icon ion-refresh" ng-click="resetElement()"/>-->
-                <button class="button icon ion-arrow-swap"  ng-click="mirror()"/>
-                <button class="button icon ion-arrow-up-b"   ng-click="moveUp()"/>
-                <button class="button icon ion-arrow-down-b"   ng-click="moveDown()"/>
-                <!--<button class="button icon ion-edit"   ng-click="moveDown()"/>-->
-                <button class="button icon ion-android-trash" ng-click="removeElement()"/>
-                <button class="button icon ion-android-remove" ng-click="hideToolbar()"/>
-            </div>
-            <button class="button icon ion-android-add" ng-show="isSelected && !isExpanded" ng-click="showToolbar()"
-                    style="position: absolute; bottom: -1px; right: 0; z-index: 9999; background-color: #f8f8f8"/>
-        </div>
-
-        <div class="bar bar-footer bar-light" style="height: 70px">
-            <carousel><!--data from json--></carousel>
-        </div>
-
-    </div>
+	<div class="bar bar-footer bar-light" style="height: 70px">
+		<carousel><!--data from json--></carousel>
+	</div>
 </div>
